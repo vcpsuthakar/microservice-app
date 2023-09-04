@@ -10,6 +10,6 @@ jobs:
         with:
           repo_token: ${{ secrets.REPO_TOKEN }}
           repositories: |
-            vcpsuthakar/repositories-dispatch-demo
+            vcpsuthakar/cidemo
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
