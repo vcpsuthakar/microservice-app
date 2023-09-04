@@ -10,6 +10,6 @@ jobs:
         with:
           repo_token: ${{ secrets.REPO_TOKEN }}
           repositories: |
-            guilouro/multiple-repositories-dispatch
+            vcpsuthakar/repositories-dispatch-demo
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
