@@ -16,8 +16,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { data: dispatch } = await github.repos.createDispatchEvent({
-              owner: 'SecondRepoOwner',
-              repo: 'second-repo-name',
+              owner: 'vcpsuthakar',
+              repo: 'vcpsuthakar/common',
               event_type: 'trigger-workflow-event'
             });
             
@@ -29,8 +29,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const repo = 'SecondRepoOwner/second-repo-name';
-            const workflow = 'second-repo-workflow.yml';
+            const repo = 'vcpsuthakar/common';
+            const workflow = '.github/workflows/common-repo.yml';
             
             // Poll the workflow status until it's completed
             let status = 'queued';
