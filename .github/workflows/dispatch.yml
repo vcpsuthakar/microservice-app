@@ -1,5 +1,6 @@
 name: Create Repository Dispatch
 on: push
+
 jobs:
   dispatcher:
     runs-on: ubuntu-latest
@@ -10,6 +11,6 @@ jobs:
         with:
           repo_token: ${{ secrets.REPO_TOKEN }}
           repositories: |
-            vcpsuthakar/repositories-dispatch-demo
+            vcpsuthakar/common
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
