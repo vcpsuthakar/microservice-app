@@ -2,7 +2,7 @@
 
 An action to dispatch event to multiple repositories.
 
-### How to use Repositories Dispatch -2
+### How to use Repositories Dispatch -3
 
 ```yml
 - name: Dispatch event
