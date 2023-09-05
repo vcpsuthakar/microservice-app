@@ -1,0 +1,68 @@
+name: Trigger Second Repo Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  trigger-second-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Second Repo Workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: dispatch } = await github.repos.createDispatchEvent({
+              owner: 'SecondRepoOwner',
+              repo: 'second-repo-name',
+              event_type: 'trigger-workflow-event'
+            });
+            
+            console.log('Dispatched Second Repo Workflow:', dispatch);
+      
+      - name: Wait for Second Repo Workflow
+        id: wait-for-second-workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repo = 'SecondRepoOwner/second-repo-name';
+            const workflow = 'second-repo-workflow.yml';
+            
+            // Poll the workflow status until it's completed
+            let status = 'queued';
+            while (status === 'queued' || status === 'in_progress') {
+              const { data: runs } = await github.actions.listWorkflowRuns({
+                owner: repo.split('/')[0],
+                repo: repo.split('/')[1],
+                workflow_file_name: workflow,
+                status: 'completed',
+                branch: 'main'
+              });
+              
+              if (runs && runs.workflow_runs && runs.workflow_runs.length > 0) {
+                status = runs.workflow_runs[0].conclusion;
+              }
+              
+              if (status === 'queued' || status === 'in_progress') {
+                console.log('Second Repo Workflow is still running...');
+                await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 10 seconds
+              }
+            }
+            
+            console.log('Second Repo Workflow Status:', status);
+            return status;
+      
+      - name: Proceed If Second Repo Workflow Succeeded
+        if: steps.wait-for-second-workflow.outputs.return_value == 'success'
+        run: |
+          echo "The Second Repo Workflow succeeded, proceeding to the next job."
+      
+      - name: Handle Failure
+        if: steps.wait-for-second-workflow.outputs.return_value != 'success'
+        run: |
+          echo "The Second Repo Workflow failed or was canceled, stopping the workflow and sending a message."
+          # You can add your message or actions here.
