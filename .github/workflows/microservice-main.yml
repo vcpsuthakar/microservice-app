@@ -1,0 +1,39 @@
+name: Repo1 Workflow
+
+on: [push]
+
+jobs:
+  trigger_second_repo_workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Second Repo Workflow
+        uses: actions/checkout@v2
+        
+      - name: Run Second Repo Workflow
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const { data: workflowRuns } = await github.actions.listWorkflowRuns({
+              owner: 'your-organization',
+              repo: 'second-repo',
+              workflow_id: 'your-second-workflow-id',
+              event: 'push', // You can change this event if needed
+              branch: 'main', // Change to your target branch
+              status: 'success',
+            });
+
+            if (workflowRuns.total_count > 0) {
+              console.log('Second Repo Workflow already succeeded.');
+            } else {
+              console.log('Second Repo Workflow not yet succeeded.');
+              process.exit(1);
+            }
+            with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Continue if Second Repo Workflow Succeeded
+        if: ${{ success() }}
+        run: |
+          # Add your steps for the next job in this repository
+          echo "Second Repo Workflow Succeeded! Continuing..."
