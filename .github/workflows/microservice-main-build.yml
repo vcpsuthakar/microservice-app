@@ -1,4 +1,4 @@
-name: Trigger Repo B Workflow
+name: Microservice Mian Workflow
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: vcpsuthakar/common 
           event-type: trigger-workflow-event
-          client-payload: '{"ref": "main"}' 
+          client-payload: '{"ref": "master"}' 
 
       - name: Wait for Repo B Workflow Completion
         id: wait-for-workflow
