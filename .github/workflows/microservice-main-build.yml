@@ -1,0 +1,37 @@
+name: Trigger Repo B Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  trigger-workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Common Workflow
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: vcpsuthakar/common 
+          event-type: trigger-workflow-event
+          client-payload: '{"ref": "main"}' 
+
+      - name: Wait for Repo B Workflow Completion
+        id: wait-for-workflow
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/${{ github.repository }}/actions/runs
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event_type: trigger-workflow-event
+          #workflow_id: <workflow_id_of_repo_b> # Replace with the workflow ID of Repo B
+
+      - name: Check Workflow Status
+        run: |
+          if [[ "${{ steps.wait-for-workflow.outputs.status }}" == "completed" && "${{ steps.wait-for-workflow.outputs.conclusion }}" == "success" ]]; then
+            echo "Repo B workflow completed successfully."
+          else
+            echo "Repo B workflow failed or is still running."
+            exit 1
+          fi
