@@ -1,0 +1,28 @@
+name: First repo workflow
+on:
+  push:
+    branches:
+      - master
+jobs:
+  first-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Trigger second repo workflow
+        run: |
+          echo "repo_token=$GITHUB_TOKEN" >> $GITHUB_ENV
+          curl -X POST https://api.github.com/repos/vcpsuthakar/common/dispatches \
+            -H "Authorization: Bearer $repo_token" \
+            -d '{"event_type": "workflow_dispatch"}'
+      - name: Wait for second repo workflow to finish
+        uses: actions/wait-for@v1
+        with:
+          workflow: workflow_dispatch
+          timeout: 10m
+      - name: Continue workflow
+        if: ${{ success }}
+        run: echo "Second repo workflow succeeded"
+      - name: Fail workflow
+        if: ${{ not success }}
+        run: echo "Second repo workflow failed"
