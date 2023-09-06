@@ -1,4 +1,4 @@
-name: Create Repository Dispatch
+name: Repository Dispatch
 on: workflow_dispatch
 
 jobs:
