@@ -14,8 +14,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          repository: vcpsuthakar/common 
-          event-type: trigger-workflow-event
+          repository: vcpsuthakar/microservice-app 
+          event-type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
 
   #    - name: Wait for Repo B Workflow Completion
