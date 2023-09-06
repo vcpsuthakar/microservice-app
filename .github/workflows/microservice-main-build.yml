@@ -1,35 +1,23 @@
-name: Microservice Main Workflow
-
-on:
- workflow_dispatch
+name: Create Repository Dispatch
+on: workflow_dispatch
 
 jobs:
-  trigger-workflow:
+  dispatcher:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Trigger Common Workflow
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: Dispatch
+        uses: ./
         with:
-          token:  ${{ secrets.REPO_TOKEN }}
+          repo_token: ${{ secrets.REPO_TOKEN }}
           repositories: |
             vcpsuthakar/common
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
 
-  #    - name: Wait for Repo B Workflow Completion
-  #      id: wait-for-workflow
-  #      uses: octokit/request-action@v2.x
-  #      with:
-  #        route: POST /repos/vcpsuthakar/common/actions/runs
-  #        token: ${{ secrets.GITHUB_TOKEN }}
-  #        event_type: trigger-workflow-event
-
-  #    - name: Check Workflow Status
-  #      run: |
-  #        if [[ "${{ steps.wait-for-workflow.outputs.status }}" == "completed" && "${{ steps.wait-for-workflow.outputs.conclusion }}" == "success" ]]; then
-  #          echo "Repo B workflow completed successfully."
-  #        else
-  #          echo "Repo B workflow failed or is still running."
-  #          exit 1
-  #        fi
+  build:
+    runs-on: ubuntu-latest
+    needs: dispatcher
+    steps:
+      - name: Checkout Microservice Repo
+        uses: actions/checkout@v2
