@@ -16,7 +16,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: vcpsuthakar/common 
           event-type: trigger-workflow-event
-         # client-payload: '{"ref": "master"}' 
+          client_payload: '{"github": ${{ toJson(github) }}}'
 
       - name: Wait for Repo B Workflow Completion
         id: wait-for-workflow
