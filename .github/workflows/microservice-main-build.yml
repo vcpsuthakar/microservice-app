@@ -4,8 +4,6 @@ on: workflow_dispatch
 jobs:
   dispatcher:
     runs-on: ubuntu-latest
-    outputs:
-      dispatch-successful: ${{ steps.dispatch.outputs.success }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -14,17 +12,15 @@ jobs:
         id: dispatch
         uses: ./
         with:
-          repo_token: ${{ secrets.REPO_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
           repositories: |
             vcpsuthakar/common
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
-          run: echo ${{ steps.dispatch.outputs.success }}
 
   build:
     runs-on: ubuntu-latest
     needs: dispatcher    
-    if: ${{ needs.dispatcher.outputs.dispatch-successful == 'true' }}
     steps:
       - name: Checkout Microservice Repo
         uses: actions/checkout@v2
