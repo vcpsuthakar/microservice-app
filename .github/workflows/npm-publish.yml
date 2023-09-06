@@ -1,36 +1,17 @@
-name: Get Common Workflow Status
+name: Test Dispatch
+on: workflow_dispatch
 
-on:
-  workflow_dispatch:
-  workflow_run:
-    workflows: ["Common Workflow"]
-    types:
-      - completed
+permissions:
+  pull-requests: write
+  contents: write
 
 jobs:
-  get-common-workflow-status:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Get Common Workflow Status
-        id: common-status
-        run: |
-          repo_owner="vcpsuthakar"
-          repo_name="common"
-          workflow_name="Common Workflow"
-
-          # Get the latest run of the Common Workflow
-          response=$(curl -s -X GET \
-            -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/workflows/${workflow_name}/runs?event=trigger-common")
-
-          # Extract the run ID and status
-          run_id=$(echo "$response" | jq -r '.workflow_runs[0].id')
-          status=$(echo "$response" | jq -r '.workflow_runs[0].conclusion')
-
-          echo "Common Workflow Run ID: $run_id"
-          echo "Common Workflow Status: $status"
-          
-          # You can perform additional actions based on the status here
-
+      - name: Test repository dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          # token: ${{ secrets.PUBLIC_REPO_SCOPED_TOKEN }}
+          event-type: tests
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
