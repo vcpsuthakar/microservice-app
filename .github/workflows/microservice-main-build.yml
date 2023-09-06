@@ -16,7 +16,7 @@ jobs:
 
       - name: Dispatch
         id: dispatch
-        uses: peter-evans/repository-dispatch@v1
+        uses: ./
         with:
           token: ${{ secrets.REPO_TOKEN }}
           repositories: |
