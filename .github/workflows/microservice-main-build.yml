@@ -15,7 +15,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repositories: |
-            vcpsuthakar/common
+            vcpsuthakar/microservice-app
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
 
