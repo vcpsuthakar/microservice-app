@@ -7,9 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Dispatch
-     #   uses: ./
+        uses: ./
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.REPO_TOKEN }}
           repositories: |
             vcpsuthakar/common
           event_type: test_dispatch
