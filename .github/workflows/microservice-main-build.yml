@@ -20,8 +20,8 @@ jobs:
         with:
           token: ${{ secrets.myPAT }}
           repository: vcpsuthakar/common
-          event_type: test_dispatch
-          client_payload: '{"github": ${{ toJson(github) }}}'
+          event-type: test_dispatch
+          client-payload: '{"github": ${{ toJson(github) }}}'
 
   wait-for-target:
     runs-on: ubuntu-latest
