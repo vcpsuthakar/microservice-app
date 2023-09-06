@@ -22,7 +22,7 @@ jobs:
           repositories: |
             vcpsuthakar/common
           event_type: test_dispatch
-          client_payload: '{"source_workflow_run_id": ${{ github.run_id }}}' # Include the source run_id
+          client_payload: '{"github": ${{ toJson(github) }}}'
 
   wait-for-target:
     runs-on: ubuntu-latest
