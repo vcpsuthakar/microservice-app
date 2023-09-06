@@ -30,15 +30,28 @@ jobs:
       - name: Wait for Target Workflow to Complete
         id: wait-for-target
         run: |
-          target_workflow_status="in_progress"
-          while [ "$target_workflow_status" != "completed" ]; do
-            sleep 5 
-            target_workflow_status=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/vcpsuthakar/common/actions/workflows/common-repo.yml/runs?event=workflow_run" \
-              | jq -r '.workflow_runs[0].status')
-              echo "$target_workflow_status"
+          TARGET_WORKFLOW="vcpsuthakar/common/common-repo.yml.yml"
+          GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          
+          while true; do
+            STATUS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/$TARGET_WORKFLOW/actions/runs" | jq -r '.workflow_runs[0].status')
+            
+            if [ "$STATUS" == "completed" ]; then
+              break
+            elif [ "$STATUS" == "failure" ]; then
+              echo "Target workflow failed. Aborting."
+              exit 1
+            elif [ "$STATUS" == "cancelled" ]; then
+              echo "Target workflow was cancelled. Aborting."
+              exit 1
+            fi
+            sleep 10 
           done
           echo "Target workflow has completed successfully."
+
+      - name: Set Output
+        run: echo "::set-output name=target_status::completed"
 
       - name: Set Output
         run: echo "::set-output name=target_status::completed"
