@@ -1,24 +1,35 @@
-name: Trigger Second Workflow
+name: Get Common Workflow Status
 
 on:
-  workflow_dispatch:
   workflow_run:
-    workflows: ["Second Workflow"]
+    workflows: ["Common Workflow"]
     types:
       - completed
 
 jobs:
-  build:
+  get-common-workflow-status:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger Second Workflow
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.REPO_TOKEN }}
-          run: |
-              curl -X POST \
-                -H "Authorization: token ${{ secrets.REPO_TOKEN }}" \
-                -H "Accept: application/vnd.github.everest-preview+json" \
-                -d '{"event_type": "second-workflow-trigger", "client_payload": {"key1": "value1", "key2": "value2"}}' \
-                "https://api.github.com/repos/vcpsuthakar/common/dispatches"
+      - name: Get Common Workflow Status
+        id: common-status
+        run: |
+          repo_owner="vcpsuthakar"
+          repo_name="common"
+          workflow_name="Common Workflow"
+
+          # Get the latest run of the Common Workflow
+          response=$(curl -s -X GET \
+            -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/workflows/${workflow_name}/runs?event=trigger-common")
+
+          # Extract the run ID and status
+          run_id=$(echo "$response" | jq -r '.workflow_runs[0].id')
+          status=$(echo "$response" | jq -r '.workflow_runs[0].conclusion')
+
+          echo "Common Workflow Run ID: $run_id"
+          echo "Common Workflow Status: $status"
+          
+          # You can perform additional actions based on the status here
+
