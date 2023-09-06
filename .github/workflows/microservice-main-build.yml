@@ -31,7 +31,7 @@ jobs:
         id: wait-for-target
         run: |
           TARGET_WORKFLOW="vcpsuthakar/common/common-repo.yml.yml"
-          GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN="${{ secrets.REPO_TOKEN }}"
           
           while true; do
             STATUS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
