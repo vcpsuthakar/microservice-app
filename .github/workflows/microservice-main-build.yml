@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Trigger Common Workflow
-        uses: peter-evans/repository-dispatch@v2
+        uses: ./
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: vcpsuthakar/common 
