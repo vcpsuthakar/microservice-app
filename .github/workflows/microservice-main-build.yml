@@ -42,7 +42,7 @@ jobs:
             const { data: runs } = await github.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'target.yml',
+              workflow_id: 'common-repo.yml',
               status: 'completed',
               branch: context.ref
             });
