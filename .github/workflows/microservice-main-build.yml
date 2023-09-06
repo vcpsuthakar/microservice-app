@@ -5,10 +5,10 @@ jobs:
   dispatcher:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+     # - uses: actions/checkout@v2
       - name: Dispatch
-      - uses: ./
-        with:
+        uses: ./
+        with: 
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           repositories: |
             vcpsuthakar/common
