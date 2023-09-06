@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test repository dispatch
-        uses: vcpsuthakar/common@v1
+        uses: peter-evans/repository-dispatch@v1
         with:
-          # token: ${{ secrets.PUBLIC_REPO_SCOPED_TOKEN }}
-          event-type: tests
+          # token: ${{ secrets.REPO_TOKEN }}
+          event-type: mytests
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
