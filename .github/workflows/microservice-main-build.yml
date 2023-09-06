@@ -37,11 +37,10 @@ jobs:
           WAIT_TIME=0
 
           until [ "$WAIT_TIME" -ge "$MAX_WAIT_TIME" ]; do
-         #    STATUS=$(curl -s -H "Authorization: Bearer ${{ secrets.myPAT }}" \
-         #     "https://api.github.com/repos/$TARGET_REPO/actions/workflows/$TARGET_WORKFLOW/runs" | jq -r '.workflow_runs[0].conclusion')
-             
+             #STATUS=$(curl -s -H "Authorization: Bearer ${{ secrets.myPAT }}" \
+              #"https://api.github.com/repos/$TARGET_REPO/actions/workflows/$TARGET_WORKFLOW/runs" | jq -r '.workflow_runs[0].conclusion')
               STATUS = $(curl -s -H "Authorization: Bearer ${{ secrets.myPAT }}" \
-                      "https://api.github.com/repos/$TARGET_REPO/actions/workflows/$TARGET_WORKFLOW/runs" | jq -r --arg target_workflow "${{ github.workflow }}" '.workflow_runs[] | select(.workflow.name == $target_workflow) | .conclusion')
+                     "https://api.github.com/repos/$TARGET_REPO/actions/workflows/$TARGET_WORKFLOW/runs" | jq -r --arg target_workflow "${{ github.workflow }}" '.workflow_runs[] | select(.workflow.name == $target_workflow) | .conclusion')
             
             if [ "$STATUS" != "null" ]; then
               if [ "$STATUS" == "success" ]; then
