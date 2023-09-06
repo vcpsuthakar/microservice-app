@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test repository dispatch
-        uses: vcpsuthakar/common@v2
+        uses: vcpsuthakar/common@v1
         with:
           # token: ${{ secrets.PUBLIC_REPO_SCOPED_TOKEN }}
           event-type: tests
