@@ -14,13 +14,12 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
- #     - name: Dispatch
- #       id: dispatch
- #       uses: peter-evans/repository-dispatch@v1
+      - name: Dispatch
+        id: dispatch
+        uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.REPO_TOKEN }}
-          repositories: |
-            vcpsuthakar/common
+          repository: vcpsuthakar/common
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
 
