@@ -23,45 +23,27 @@ jobs:
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
 
-#  build:
-#    runs-on: ubuntu-latest
-#    needs: dispatcher    
-#    steps:
-#     - name: Checkout Microservice Repo
-#        uses: actions/checkout@v2
-
-  build:
+  wait-for-target:
     runs-on: ubuntu-latest
     needs: dispatcher
     steps:
       - name: Wait for Target Workflow to Complete
         id: wait-for-target
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const { data: runs } = await github.actions.listWorkflowRuns({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'common-repo.yml',
-              status: 'completed',
-              branch: context.ref
-            });
-            const latestRun = runs[0];
-            if (latestRun) {
-              core.setOutput('target_status', latestRun.conclusion);
-            } else {
-              core.setOutput('target_status', 'pending');
-            }
-          timeout-minutes: 10 # Adjust the timeout as needed
-
-      - name: Check Target Workflow Status
         run: |
-          target_status="${{ steps.wait-for-target.outputs.target_status }}"
-          if [ "$target_status" != "success" ]; then
-            echo "Target workflow did not succeed. Aborting."
-            exit 1
-          fi
-        shell: bash
+          target_workflow_status="in_progress"
+          while [ "$target_workflow_status" != "completed" ]; do
+            sleep 30 
+            target_workflow_status=$(curl -s -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
+              "https://api.github.com/vcpsuthakar/common/actions/workflows/common-repo.yml/runs?event=workflow_run" \
+              | jq -r '.workflow_runs[0].status')
+          done
+          echo "Target workflow has completed successfully."
 
-      - name: Checkout Source Repository
-        uses: actions/checkout@v2
+      - name: Set Output
+        run: echo "::set-output name=target_status::completed"
+  build:
+    runs-on: ubuntu-latest
+    needs: wait-for-target    
+    steps:
+     - name: Checkout Microservice Repo
+       uses: actions/checkout@v2
