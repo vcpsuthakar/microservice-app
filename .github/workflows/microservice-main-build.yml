@@ -1,4 +1,4 @@
-name: Microservice Mian Workflow
+name: Microservice Main Workflow
 
 on:
   push:
@@ -15,8 +15,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: vcpsuthakar/common 
-          event-type: trigger-workflow-event
-          client_payload: '{"github": ${{ toJson(github) }}}'
+          event-type: trigger-workflow-event 
 
       - name: Wait for Repo B Workflow Completion
         id: wait-for-workflow
@@ -24,8 +23,7 @@ jobs:
         with:
           route: POST /repos/${{ github.repository }}/actions/runs
           token: ${{ secrets.GITHUB_TOKEN }}
-          event_type: trigger-workflow-event
-          #workflow_id: <workflow_id_of_repo_b> # Replace with the workflow ID of Repo B
+          event_type: workflow_run # Replace with the actual event type you want to wait for
 
       - name: Check Workflow Status
         run: |
