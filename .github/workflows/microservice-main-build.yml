@@ -7,7 +7,7 @@ jobs:
     steps:
         
       - name: Dispatch
-        uses: actions/checkout@v2
+        uses: ./
        # uses: vcpsuthakar/common@master
         with: 
        #   repo_token: ${{ secrets.GITHUB_TOKEN }}
