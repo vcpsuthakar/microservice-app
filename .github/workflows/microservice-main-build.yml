@@ -21,9 +21,9 @@ jobs:
         id: wait-for-workflow
         uses: octokit/request-action@v2.x
         with:
-          route: POST /repos/${{ github.repository }}/actions/runs
+          route: POST /repos/vcpsuthakar/common/actions/runs
           token: ${{ secrets.GITHUB_TOKEN }}
-          event_type: workflow_run # Replace with the actual event type you want to wait for
+          event_type: trigger-workflow-event
 
       - name: Check Workflow Status
         run: |
