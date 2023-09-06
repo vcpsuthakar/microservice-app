@@ -5,8 +5,8 @@ jobs:
   dispatcher:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Dispatch
+      - uses: actions/checkout@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           repositories: |
