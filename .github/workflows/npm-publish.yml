@@ -12,6 +12,6 @@ jobs:
       - name: Test repository dispatch
         uses: peter-evans/repository-dispatch@v1
         with:
-          # token: ${{ secrets.REPO_TOKEN }}
+          token: ${{ secrets.REPO_TOKEN }}
           event-type: mytests
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
