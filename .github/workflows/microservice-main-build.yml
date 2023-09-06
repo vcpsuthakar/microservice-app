@@ -19,6 +19,7 @@ jobs:
             vcpsuthakar/common
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
+          run: echo ${{ steps.dispatch.outputs.success }}
 
   build:
     runs-on: ubuntu-latest
