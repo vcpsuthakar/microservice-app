@@ -30,28 +30,34 @@ jobs:
       - name: Wait for Target Workflow to Complete
         id: wait-for-target
         run: |
-          TARGET_WORKFLOW="vcpsuthakar/common/common-repo.yml.yml"
-          GITHUB_TOKEN="${{ secrets.REPO_TOKEN }}"
-          
-          while true; do
-            STATUS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-              "https://api.github.com/$TARGET_WORKFLOW/actions/runs" | jq -r '.workflow_runs[0].status')
-            
-            if [ "$STATUS" == "completed" ]; then
-              break
-            elif [ "$STATUS" == "failure" ]; then
-              echo "Target workflow failed. Aborting."
-              exit 1
-            elif [ "$STATUS" == "cancelled" ]; then
-              echo "Target workflow was cancelled. Aborting."
-              exit 1
-            fi
-            sleep 10 
-          done
-          echo "Target workflow has completed successfully."
+          TARGET_REPO="vcpsuthakar/common"
+          TARGET_WORKFLOW="common-repo.yml" 
+          POLL_INTERVAL=30
+          MAX_WAIT_TIME=1800
+          WAIT_TIME=0
 
-      - name: Set Output
-        run: echo "::set-output name=target_status::completed"
+          until [ "$WAIT_TIME" -ge "$MAX_WAIT_TIME" ]; do
+            STATUS=$(curl -s -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
+              "https://api.github.com/repos/$TARGET_REPO/actions/workflows/$TARGET_WORKFLOW/runs" | jq -r '.workflow_runs[0].conclusion')
+            
+            if [ "$STATUS" != "null" ]; then
+              if [ "$STATUS" == "success" ]; then
+                echo "Target workflow has completed successfully."
+                break
+              else
+                echo "Target workflow failed. Aborting."
+                exit 1
+              fi
+            fi
+
+            sleep $POLL_INTERVAL
+            WAIT_TIME=$((WAIT_TIME + POLL_INTERVAL))
+          done
+          
+          if [ "$WAIT_TIME" -ge "$MAX_WAIT_TIME" ]; then
+            echo "Timed out waiting for target workflow to complete. Aborting."
+            exit 1
+          fi
 
       - name: Set Output
         run: echo "::set-output name=target_status::completed"
