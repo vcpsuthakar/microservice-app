@@ -23,11 +23,45 @@ jobs:
           event_type: test_dispatch
           client_payload: '{"github": ${{ toJson(github) }}}'
 
+#  build:
+#    runs-on: ubuntu-latest
+#    needs: dispatcher    
+#    steps:
+#     - name: Checkout Microservice Repo
+#        uses: actions/checkout@v2
+
   build:
     runs-on: ubuntu-latest
-    needs: dispatcher    
+    needs: dispatcher
     steps:
-      - name: Checkout Microservice Repo
-        uses: actions/checkout@v2
+      - name: Wait for Target Workflow to Complete
+        id: wait-for-target
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const { data: runs } = await github.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'target.yml',
+              status: 'completed',
+              branch: context.ref
+            });
+            const latestRun = runs[0];
+            if (latestRun) {
+              core.setOutput('target_status', latestRun.conclusion);
+            } else {
+              core.setOutput('target_status', 'pending');
+            }
+          timeout-minutes: 10 # Adjust the timeout as needed
 
-      # Add your build steps here
+      - name: Check Target Workflow Status
+        run: |
+          target_status="${{ steps.wait-for-target.outputs.target_status }}"
+          if [ "$target_status" != "success" ]; then
+            echo "Target workflow did not succeed. Aborting."
+            exit 1
+          fi
+        shell: bash
+
+      - name: Checkout Source Repository
+        uses: actions/checkout@v2
