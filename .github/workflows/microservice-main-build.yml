@@ -9,7 +9,7 @@ jobs:
       - name: Dispatch
         uses: ./
         with:
-          repo_token: ${{ secrets.REPO_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
           repositories: |
             vcpsuthakar/common
           event_type: test_dispatch
