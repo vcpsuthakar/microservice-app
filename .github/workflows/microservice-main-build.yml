@@ -1,5 +1,9 @@
 name: Create Repository Dispatch
 on: workflow_dispatch
+ workflow_run:
+    workflows: ["common-repo.yml"]
+    types:
+      - completed
 
 jobs:
   dispatcher:
