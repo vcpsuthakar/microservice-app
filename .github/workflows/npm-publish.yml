@@ -1,0 +1,28 @@
+name: Trigger Second Workflow
+
+on:
+  workflow_run:
+    workflows: ["Second Workflow"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Second Workflow
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const response = await github.repos.createDispatchEvent({
+              owner: 'your-username',
+              repo: 'your-repo-name',
+              event_type: 'second-workflow-trigger',
+              client_payload: {
+                key1: 'value1',
+                key2: 'value2'
+              }
+            });
+            console.log(response);
