@@ -15,11 +15,11 @@ jobs:
       - name: Trigger Second Workflow
         uses: actions/github-script@v5
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.REPO_TOKEN }}
           script: |
             const response = await github.repos.createDispatchEvent({
-              owner: 'your-username',
-              repo: 'your-repo-name',
+              owner: 'vcpsuthakar',
+              repo: 'vcpsuthakar/common',
               event_type: 'second-workflow-trigger',
               client_payload: {
                 key1: 'value1',
