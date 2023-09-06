@@ -16,14 +16,9 @@ jobs:
         uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.REPO_TOKEN }}
-          script: |
-            const response = await github.repos.createDispatchEvent({
-              owner: 'vcpsuthakar',
-              repo: 'vcpsuthakar/common',
-              event_type: 'second-workflow-trigger',
-              client_payload: {
-                key1: 'value1',
-                key2: 'value2'
-              }
-            });
-            console.log(response);
+          run: |
+              curl -X POST \
+                -H "Authorization: token $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github.everest-preview+json" \
+                -d '{"event_type": "second-workflow-trigger", "client_payload": {"key1": "value1", "key2": "value2"}}' \
+                "https://api.github.com/repos/vcpsuthakar/common/dispatches"
