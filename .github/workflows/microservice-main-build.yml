@@ -8,7 +8,7 @@ jobs:
         
       - name: Dispatch
         uses: ./
-       # uses: vcpsuthakar/common@master
+      - uses: vcpsuthakar/common@master
         with: 
        #   repo_token: ${{ secrets.GITHUB_TOKEN }}
           repo_token: ${{ secrets.REPO_TOKEN }}
