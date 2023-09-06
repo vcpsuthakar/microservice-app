@@ -21,7 +21,8 @@ jobs:
           token: ${{ secrets.myPAT }}
           repository: vcpsuthakar/common
           event-type: test_dispatch
-          client-payload: '{"github": ${{ toJson(github) }}}'
+          #client-payload: '{"github": ${{ toJson(github) }}}'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
 
   wait-for-target:
     runs-on: ubuntu-latest
