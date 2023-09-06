@@ -18,7 +18,7 @@ jobs:
         id: dispatch
         uses: ./
         with:
-          token: ${{ secrets.REPO_TOKEN }}
+          repo_token: ${{ secrets.REPO_TOKEN }}
           repositories: |
             vcpsuthakar/common
           event_type: test_dispatch
