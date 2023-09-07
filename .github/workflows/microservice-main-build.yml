@@ -23,7 +23,7 @@ jobs:
           event-type: test_dispatch
           #client-payload: '{"github": ${{ toJson(github) }}}'
           #client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
-          client-payload: ${{ toJson(steps.set-payload.outputs.payload) }}  
+          client-payload: '${{ toJson(steps.set-payload.outputs.payload) }}' 
 
   wait-for-target:
     runs-on: ubuntu-latest
