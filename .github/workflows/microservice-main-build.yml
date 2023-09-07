@@ -47,7 +47,9 @@ jobs:
               if [ "$STATUS" == "success" ]; then
                 echo "Target workflow has completed successfully."
                 #echo "Payload: ${{ toJson(steps.set-payload.outputs.payload) }}"
-                echo "Payload: ${{ toJson(needs.wait-for-target.outputs.target_payload) }}"
+                #echo "Payload: ${{ toJson(needs.wait-for-target.outputs.target_payload) }}"
+                echo "Payload: ${{ toJson(needs.dispatcher.outputs.payload) }}"
+
 
                 break
               else
