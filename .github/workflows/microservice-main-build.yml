@@ -24,6 +24,7 @@ jobs:
           client-payload: '{"github": ${{ toJson(github) }}}'
           #client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
           #client-payload: '{"github": ${{ toJson(steps.set-payload.outputs.payload) }}}' 
+          
 
   wait-for-target:
     runs-on: ubuntu-latest
@@ -48,9 +49,8 @@ jobs:
                 echo "Target workflow has completed successfully."
                 #echo "Payload: ${{ toJson(steps.set-payload.outputs.payload) }}"
                 #echo "Payload: ${{ toJson(needs.wait-for-target.outputs.target_payload) }}"
-                echo "Payload: ${{ toJson(needs.dispatcher.outputs.payload) }}"
-
-
+                #echo "Payload: ${{ toJson(needs.dispatcher.outputs.payload) }}"
+                echo "Received Client Payload: ${{ github.event.client_payload }}"
                 break
               else
                 echo "Target workflow failed. Aborting."
