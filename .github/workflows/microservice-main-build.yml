@@ -45,6 +45,7 @@ jobs:
             if [ "$STATUS" != "null" ]; then
               if [ "$STATUS" == "success" ]; then
                 echo "Target workflow has completed successfully."
+                echo "Payload: ${{ toJson(steps.set-payload.outputs.payload) }}"
                 break
               else
                 echo "Target workflow failed. Aborting."
