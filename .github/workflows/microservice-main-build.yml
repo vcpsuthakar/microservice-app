@@ -30,8 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: dispatcher
     steps:
+      - name: Get Payload Data
+        id: get-payload
+        run: |
+          echo "Payload Data from common-repo.yml: ${{ needs.wait-for-target.outputs.target_status }}"
+          
       - name: Wait for Target Workflow to Complete
-        id: wait-for-target
+        id: wait-for-targe
         run: |
           TARGET_REPO="vcpsuthakar/common"
           TARGET_WORKFLOW="common-repo.yml" 
@@ -48,9 +53,6 @@ jobs:
               if [ "$STATUS" == "success" ]; then
                 echo "Target workflow has completed successfully."
                 #echo "Payload: ${{ toJson(steps.set-payload.outputs.payload) }}"
-                #echo "Payload: ${{ toJson(needs.wait-for-target.outputs.target_payload) }}"
-                #echo "Payload: ${{ toJson(needs.dispatcher.outputs.payload) }}"
-                echo "Received Client Payload: ${{ github.event.client_payload }}"
                 break
               else
                 echo "Target workflow failed. Aborting."
