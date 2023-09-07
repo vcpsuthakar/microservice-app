@@ -24,7 +24,6 @@ jobs:
           #client-payload: '{"github": ${{ toJson(github) }}}'
           #client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
           client-payload: ${{ toJson(steps.set-payload.outputs.payload) }}  
-          run: echo "Target-----> ${{ toJson(steps.set-payload.outputs.payload) }} "
 
   wait-for-target:
     runs-on: ubuntu-latest
