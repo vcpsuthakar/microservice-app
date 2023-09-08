@@ -30,18 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: dispatcher
     steps:
-      - name: Get Payload Data
-        id: get-payload
-        run: |
-          echo "Payload Data from common-repo.yml: ${{ needs.wait-for-target.outputs.target_status }}"
-          
+     
       - name: Wait for Target Workflow to Complete
-        id: wait-for-targe
+        #id: wait-for-targe
         run: |
           TARGET_REPO="vcpsuthakar/common"
           TARGET_WORKFLOW="common-repo.yml" 
-          POLL_INTERVAL=30
-          MAX_WAIT_TIME=1800
+          POLL_INTERVAL=5
+          MAX_WAIT_TIME=500
           WAIT_TIME=0
 
           until [ "$WAIT_TIME" -ge "$MAX_WAIT_TIME" ]; do
