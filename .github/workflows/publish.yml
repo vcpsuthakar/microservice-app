@@ -19,7 +19,7 @@ jobs:
             const { data } = await github.actions.createWorkflowDispatch({
               owner: 'vcpsuthakar',
               repo: 'vcpsuthakar/common',
-             # workflow_id: 'SECOND_WORKFLOW_ID',
-              ref: 'master'
+              workflow_id: 'Second.yml',
+              ref: 'master',
             });
             console.log(data);
