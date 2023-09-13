@@ -14,12 +14,12 @@ jobs:
       - name: Trigger Second Workflow in Repo B
         uses: actions/github-script@v6
         with:
-          #github-token: ${{ secrets.NNN }}
+          github-token: ${{ secrets.NNN }}
           script: |
             const { data } = await github.actions.createWorkflowDispatch({
               owner: 'vcpsuthakar',
               repo: 'vcpsuthakar/common',
              # workflow_id: 'SECOND_WORKFLOW_ID',
-              ref: 'master', // Or specify the branch you want to trigger
+              ref: 'master'
             });
             console.log(data);
