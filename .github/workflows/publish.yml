@@ -14,7 +14,7 @@ jobs:
       - name: Trigger Second Workflow in Repo B
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.MYPAT }}
+          github-token: ${{ secrets.REPO_TOKEN }}
           script: |
             const { data } = await github.actions.createWorkflowDispatch({
               owner: 'vcpsuthakar',
