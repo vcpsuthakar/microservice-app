@@ -1,25 +1,26 @@
-name: Trigger Second Workflow
+name: Workflow 1
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Second Workflow"]
-    types:
-      - completed
 
 jobs:
-  trigger-second-workflow:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Second Workflow in Repo B
-        uses: actions/github-script@v6
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # Add your workflow steps here
+
+      # Trigger the second workflow in the other repository
+      - name: Trigger Workflow 2
+        uses: actions/github-script@0.11.6
         with:
-          github-token: ${{ secrets.NNN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { data } = await github.actions.createWorkflowDispatch({
               owner: 'vcpsuthakar',
               repo: 'vcpsuthakar/common',
-              workflow_id: 'Second.yml',
-              ref: 'master',
+              workflow_id: 'Second.yml', // Use the actual workflow file name
             });
             console.log(data);
